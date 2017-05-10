@@ -223,9 +223,10 @@ func TorrentPostEditModPanel(w http.ResponseWriter, r *http.Request) {
 	torrent, _ := torrentService.GetTorrentById(id)
 	if (torrent.ID > 0) {
 		// validation is done in ExtractInfo()
-		errUp := uploadForm.ExtractInfo(r)
+		errUp := uploadForm.ExtractInfo(r, true)
 		if errUp != nil {
 			err["errors"] = append(err["errors"], "Failed to upload!")
+			err["errors"] = append(err["errors"], errUp.Error())
 		}
 		if (len(err) > 0) {
 		//add to db and redirect depending on result

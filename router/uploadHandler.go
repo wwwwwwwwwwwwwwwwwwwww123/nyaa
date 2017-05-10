@@ -24,7 +24,7 @@ func UploadHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "POST" {
 		defer r.Body.Close()
 		// validation is done in ExtractInfo()
-		err := uploadForm.ExtractInfo(r)
+		err := uploadForm.ExtractInfo(r, false)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return

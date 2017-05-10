@@ -74,7 +74,7 @@ var p = bluemonday.UGCPolicy()
 /**
 UploadForm.ExtractInfo takes an http request and computes all fields for this form
 */
-func (f *UploadForm) ExtractInfo(r *http.Request) error {
+func (f *UploadForm) ExtractInfo(r *http.Request, nocaptcha bool) error {
 
 	f.Name = r.FormValue(UploadFormName)
 	f.Category = r.FormValue(UploadFormCategory)
@@ -84,7 +84,7 @@ func (f *UploadForm) ExtractInfo(r *http.Request) error {
 	f.Remake = r.FormValue(UploadFormRemake) == "on"
 	f.Captcha = captcha.Extract(r)
 
-	if !captcha.Authenticate(f.Captcha) {
+	if !nocaptcha && !captcha.Authenticate(f.Captcha) {
 		// TODO: Prettier passing of mistyped Captcha errors
 		return errors.New(captcha.ErrInvalidCaptcha.Error())
 	}
@@ -96,6 +96,7 @@ func (f *UploadForm) ExtractInfo(r *http.Request) error {
 	cache.Clear()
 
 	catsSplit := strings.Split(f.Category, "_")
+	fmt.Println(catsSplit)
 	// need this to prevent out of index panics
 	if len(catsSplit) == 2 {
 		CatID, err := strconv.Atoi(catsSplit[0])
