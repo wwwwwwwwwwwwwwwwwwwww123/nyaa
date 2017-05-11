@@ -26,7 +26,6 @@ func RSSHandler(w http.ResponseWriter, r *http.Request) {
 		Link:    &feeds.Link{Href: "https://" + config.WebAddress + "/"},
 		Created: createdAsTime,
 	}
-
 	feed.Items = make([]*feeds.Item, len(torrents))
 
 	for i, torrent := range torrents {
@@ -36,8 +35,8 @@ func RSSHandler(w http.ResponseWriter, r *http.Request) {
 			Title:       torrent.Name,
 			Link:        &feeds.Link{Href: string(torrentJSON.Magnet)},
 			Description: string(torrentJSON.Description),
-			Created:     torrent.Date.Format("2006/01/02 15:04:05"),
-			Updated:     torrent.Date.Format("2006/01/02 15:04:05"),
+			Created:     torrent.Date,
+			Updated:     torrent.Date,
 		}
 	}
 	// allow cross domain AJAX requests
